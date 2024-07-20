@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwTokenStrategy } from './strategies/jwt.strategy';
+import { CarritoUsuarioModule } from 'src/carrito-usuario/carrito-usuario.module';
 
 @Module({
   controllers: [UsuarioController],
@@ -17,7 +18,7 @@ import { JwTokenStrategy } from './strategies/jwt.strategy';
       {
         name: Usuario.name,
         schema: UsuarioSchema,
-      }
+      },
     ]),
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.registerAsync({
@@ -34,6 +35,6 @@ import { JwTokenStrategy } from './strategies/jwt.strategy';
 
     })
   ],
-  exports: [MongooseModule ,JwTokenStrategy, PassportModule, JwtModule ]
+  exports: [MongooseModule ,JwTokenStrategy, PassportModule, JwtModule, UsuarioService ]
 })
 export class UsuarioModule {}

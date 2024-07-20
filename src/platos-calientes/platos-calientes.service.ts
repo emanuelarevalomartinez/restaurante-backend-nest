@@ -9,7 +9,8 @@ import { Model } from 'mongoose';
 export class PlatosCalientesService {
 
   constructor(
-    @InjectModel(PlatosCaliente.name) private platoModel: Model<PlatosCaliente>
+    @InjectModel(PlatosCaliente.name) 
+    private platoModel: Model<PlatosCaliente>
       ) {
 
     }

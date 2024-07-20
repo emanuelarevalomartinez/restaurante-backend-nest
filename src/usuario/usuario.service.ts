@@ -35,7 +35,10 @@ export class UsuarioService {
         id: UUID(),
         password: bycrypt.hashSync( password, 10 )
       });
-      return usuario;
+      return {
+        ...datosDeUsuarioDto,
+        token: this.getJwToken( { id: usuario.id } ),
+      };
     } catch (error) {
       this.handleDatabaseError(error);
     }
@@ -43,7 +46,7 @@ export class UsuarioService {
 
   async login(loginUserDto: LoginUserDto) {
 
-    const {  password } = loginUserDto;
+    const {  password,...user } = loginUserDto;
     
     const usuario = await this.usuarioModel.findOne({
       nombre: loginUserDto.nombre,
@@ -55,13 +58,16 @@ export class UsuarioService {
       throw new UnauthorizedException('Credenciales incorrectas').getResponse();
     }
 
-    // if( !bycrypt.compareSync( password, usuario.password ) ){
-    //   throw new UnauthorizedException('Credenciales no son validad ( password) ').getResponse();
-    // }
+    if( !bycrypt.compareSync( password, usuario.password ) ){
+      throw new UnauthorizedException('Credenciales no son validad ( password) ').getResponse();
+    }
 
    
 
-    return usuario;
+    return {
+      ...user,
+      token: this.getJwToken( { id: usuario.id } ),
+    };
   }
 
   async findAll() {
@@ -117,7 +123,7 @@ export class UsuarioService {
   private validateRoles(roles?: Roles[]): void {
     if (roles) {
       for (const rol of roles) {
-        if (![Roles.administrador, Roles.superUsuario, Roles.usuario].includes(rol)) {
+        if (![Roles.admin, Roles.superU, Roles.user].includes(rol)) {
           throw new BadRequestException('User with an unauthorized role');
         }
       }

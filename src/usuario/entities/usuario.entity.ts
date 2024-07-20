@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import { Roles } from "../interfaces";
+import { CarritoUsuario } from "src/carrito-usuario/entities/carrito-usuario.entity";
 
 
 @Schema()
@@ -31,9 +32,19 @@ export class Usuario extends Document {
 
     @Prop({
         isRequired: false,
-        default: Roles.usuario,
+        default: Roles.user,
     })
     roles?:Roles[];
+
+    
+  @Prop({
+    type: [{ 
+        type: Types.ObjectId, 
+        ref: 'CarritoUsuario' 
+    }],
+  })
+  carritos: Types.Array<CarritoUsuario>;
+    
 }
 
 export const UsuarioSchema = SchemaFactory.createForClass( Usuario );

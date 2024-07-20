@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { CarritoUsuarioService } from './carrito-usuario.service';
 import { CreateCarritoUsuarioDto } from './dto/create-carrito-usuario.dto';
 import { UpdateCarritoUsuarioDto } from './dto/update-carrito-usuario.dto';
@@ -7,9 +7,12 @@ import { UpdateCarritoUsuarioDto } from './dto/update-carrito-usuario.dto';
 export class CarritoUsuarioController {
   constructor(private readonly carritoUsuarioService: CarritoUsuarioService) {}
 
-  @Post()
-  create(@Body() createCarritoUsuarioDto: CreateCarritoUsuarioDto) {
-    return this.carritoUsuarioService.create(createCarritoUsuarioDto);
+  @Post(":idUsuario")
+  create(
+    @Param("idUsuario") idUsuario: ParseUUIDPipe,
+    @Body() createCarritoUsuarioDto: CreateCarritoUsuarioDto
+    ) {
+    return this.carritoUsuarioService.create(idUsuario,createCarritoUsuarioDto);
   }
 
   @Get()

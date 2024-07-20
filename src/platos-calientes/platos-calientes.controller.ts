@@ -2,6 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PlatosCalientesService } from './platos-calientes.service';
 import { CreatePlatosCalienteDto } from './dto/create-platos-caliente.dto';
 import { UpdatePlatosCalienteDto } from './dto/update-platos-caliente.dto';
+import { Auth, GetUser } from 'src/usuario/decoradores';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { Roles } from 'src/usuario/interfaces';
 
 @Controller('platos-calientes')
 export class PlatosCalientesController {
@@ -13,7 +16,9 @@ export class PlatosCalientesController {
   }
 
   @Get()
-  findAll() {
+ 
+  findAll(
+  ) {
     return this.platosCalientesService.findAll();
   }
 
