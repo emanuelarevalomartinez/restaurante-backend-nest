@@ -17,6 +17,6 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
       }
     ]),
   ],
-  exports: [PlatosCalientesService],
+  exports: [MongooseModule,PlatosCalientesService],
 })
 export class PlatosCalientesModule {}

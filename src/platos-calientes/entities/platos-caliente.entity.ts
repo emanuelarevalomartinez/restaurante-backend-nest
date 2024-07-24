@@ -8,7 +8,7 @@ export class PlatosCaliente extends Document {
         index: true,
         unique: true,
     })
-    id:number;
+    id:string;
 
     @Prop({
       isRequired: true,  

@@ -7,9 +7,10 @@ import { Model } from 'mongoose';
 import { Roles } from './interfaces';
 import * as bycrypt from 'bcrypt'
 import { v4 as UUID } from 'uuid'
-import { LoginUserDto } from './dto';
+import { LoginResponse, LoginUserDto, RegisterUserResponse } from './dto';
 import { JwtPayload } from './interfaces/jwt.payload';
 import { JwtService } from '@nestjs/jwt';
+import { CarritoUsuario } from 'src/carrito-usuario/entities/carrito-usuario.entity';
 
 @Injectable()
 export class UsuarioService {
@@ -18,13 +19,15 @@ export class UsuarioService {
  constructor(
   @InjectModel( Usuario.name ) 
   private  readonly usuarioModel: Model<Usuario>,
+  @InjectModel( CarritoUsuario.name ) 
+  private  readonly carritoModel: Model<CarritoUsuario>,
 
   private readonly jwtService: JwtService,
  ){
 
  }
 
-  async register(createUsuarioDto: CreateUsuarioDto) {
+  async register(createUsuarioDto: CreateUsuarioDto): Promise<RegisterUserResponse> {
     try {
 
      const {  password,...datosDeUsuarioDto } = createUsuarioDto;
@@ -36,7 +39,9 @@ export class UsuarioService {
         password: bycrypt.hashSync( password, 10 )
       });
       return {
-        ...datosDeUsuarioDto,
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
         token: this.getJwToken( { id: usuario.id } ),
       };
     } catch (error) {
@@ -44,14 +49,13 @@ export class UsuarioService {
     }
   }
 
-  async login(loginUserDto: LoginUserDto) {
+  async login(loginUserDto: LoginUserDto): Promise<LoginResponse> {
 
-    const {  password,...user } = loginUserDto;
+    const {  password } = loginUserDto;
     
     const usuario = await this.usuarioModel.findOne({
       nombre: loginUserDto.nombre,
       email: loginUserDto.email,
-      // password: loginUserDto.password
     });
 
     if (!usuario) {
@@ -62,19 +66,19 @@ export class UsuarioService {
       throw new UnauthorizedException('Credenciales no son validad ( password) ').getResponse();
     }
 
-   
-
     return {
-      ...user,
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
       token: this.getJwToken( { id: usuario.id } ),
     };
   }
 
-  async findAll() {
+  async findAllUsuario() {
     return await this.usuarioModel.find().lean();
   }
 
-  async findOne(id: ParseUUIDPipe) {
+  async findOneUsuario(id: ParseUUIDPipe) {
 
     const user = await this.usuarioModel.findOne( { id } ).lean()
 
@@ -88,7 +92,7 @@ export class UsuarioService {
   }
 
 
-  async update(id: ParseUUIDPipe, updateUsuarioDto: UpdateUsuarioDto) {
+  async updateUsuario(id: ParseUUIDPipe, updateUsuarioDto: UpdateUsuarioDto) {
     const nuevoUsuario = await this.usuarioModel.findOne( {id:id} );
 
     if(!nuevoUsuario){
@@ -106,7 +110,10 @@ export class UsuarioService {
 
   }
 
-  async remove(id: ParseUUIDPipe) {
+  async removeUsuario(id: ParseUUIDPipe) {
+
+   await this.carritoModel.deleteMany({ idUsuario: id });
+
     const { deletedCount } = await this.usuarioModel.deleteOne({ id: id });
     if(deletedCount == 0){
        throw new NotFoundException(`User whit id: ${id} not found`);

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
+import { PlatosCaliente } from "src/platos-calientes/entities/platos-caliente.entity";
 import { Usuario } from "src/usuario/entities/usuario.entity";
 
 
@@ -43,7 +44,14 @@ export class CarritoUsuario extends Document{
         ref: 'Usuario',
         required: true,
       })
-      usuario: Usuario | Types.ObjectId;
+      idUsuario: Usuario | Types.ObjectId;
+
+      @Prop({
+        type: Types.ObjectId,
+        ref: 'Platos-Caliente',
+        required: true,
+      })
+      idProducto: PlatosCaliente | Types.ObjectId;
 }
 
 export const CarritoUsuarioSchema = SchemaFactory.createForClass( CarritoUsuario );

@@ -1,13 +1,10 @@
 import { IsNumber, IsOptional, IsPositive, IsString, Min, MinLength } from "class-validator";
 
 export class CreatePlatosCalienteDto {
-    @IsNumber()
-    @IsPositive()
-    @Min(1)
-    id:number;
+    
+    id:string;
 
     @IsString()
-    @IsOptional()
     @MinLength(1)
     descripcionPlato:string;
 

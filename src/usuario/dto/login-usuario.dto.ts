@@ -4,6 +4,8 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 export class LoginUserDto {
     
 
+    id:string;
+
     @IsString()
     @MinLength(1)
     @IsNotEmpty()

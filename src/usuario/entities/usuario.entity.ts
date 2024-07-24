@@ -40,10 +40,11 @@ export class Usuario extends Document {
   @Prop({
     type: [{ 
         type: Types.ObjectId, 
-        ref: 'CarritoUsuario' 
+        ref: CarritoUsuario.name, 
     }],
+    default: [],
   })
-  carritos: Types.Array<CarritoUsuario>;
+  carritos: Types.ObjectId[];
     
 }
 

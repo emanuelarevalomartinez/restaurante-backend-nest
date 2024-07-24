@@ -2,8 +2,6 @@ import { IsNotEmpty, IsNumber, IsString, Min, MinLength } from "class-validator"
 
 export class CreateCarritoUsuarioDto {
 
-    
-    idCarrito:string;
 
     @IsString()
     @MinLength(1)
@@ -30,8 +28,5 @@ export class CreateCarritoUsuarioDto {
     @IsNotEmpty()
     cantidadAOrdenar:number;
 
-    @IsString()
-    @MinLength(1)
-    @IsNotEmpty()
-    tipoProducto:string;
+    
 }

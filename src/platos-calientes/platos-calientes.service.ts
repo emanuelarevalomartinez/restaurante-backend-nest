@@ -4,20 +4,27 @@ import { UpdatePlatosCalienteDto } from './dto/update-platos-caliente.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { PlatosCaliente } from './entities/platos-caliente.entity';
 import { Model } from 'mongoose';
+import { v4 as UUID } from 'uuid'
 
 @Injectable()
 export class PlatosCalientesService {
 
   constructor(
     @InjectModel(PlatosCaliente.name) 
-    private platoModel: Model<PlatosCaliente>
+    private platoCalienteModel: Model<PlatosCaliente>
       ) {
 
     }
 
   async create(createPlatosCalienteDto: CreatePlatosCalienteDto) {
     try {
-      const platoCaliente = await this.platoModel.create(createPlatosCalienteDto);
+
+      const { id, ...nuevoPlato } = createPlatosCalienteDto;
+      
+      const platoCaliente = await this.platoCalienteModel.create({
+         ...nuevoPlato,
+         id: UUID(),
+      });
       return platoCaliente; 
     } catch (error) {
       if(error.code == 11000 ){
@@ -30,7 +37,7 @@ export class PlatosCalientesService {
   }
 
   async findAll() {
-    return this.platoModel.find().then(platos => {
+    return this.platoCalienteModel.find().then(platos => {
       const platosConImagen = platos.filter(plato => plato.imagenAsociada && typeof plato.imagenAsociada === 'string');
       return platosConImagen.map(plato => ({
        ...plato.toObject(),
@@ -42,15 +49,25 @@ export class PlatosCalientesService {
   async findOne(id: number) {
     let platoCaliente:PlatosCaliente;
      try {
-    platoCaliente = await this.platoModel.findOne({ id: id });
+    platoCaliente = await this.platoCalienteModel.findOne({ id: id });
     return platoCaliente;
      } catch (error) {
         throw new NotFoundException(`Plato caliente with id ${id} not found`);
      }
   }
 
-  update(id: number, updatePlatosCalienteDto: UpdatePlatosCalienteDto) {
-    return `This action updates a #${id} platosCaliente`;
+  async update(id: string, updatePlatosCalienteDto: UpdatePlatosCalienteDto) {
+
+    try {
+      const upPLatoCa = await this.platoCalienteModel.findOneAndUpdate(
+        { id: id },
+        updatePlatosCalienteDto,
+        { new: true },
+        );
+      return upPLatoCa;
+    } catch (error) {
+        throw new BadRequestException("Plato-Caliente can not update");
+    }
   }
 
   remove(id: number) {
