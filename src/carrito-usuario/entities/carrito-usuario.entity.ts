@@ -32,7 +32,7 @@ export class CarritoUsuario extends Document{
     @Prop({
         required:true,
     })
-    cantidadAOrdenar: string;
+    cantidadAOrdenar: number;
 
     @Prop({
         required:true,
@@ -47,11 +47,9 @@ export class CarritoUsuario extends Document{
       idUsuario: Usuario | Types.ObjectId;
 
       @Prop({
-        type: Types.ObjectId,
-        ref: 'Platos-Caliente',
-        required: true,
+        required:true,
       })
-      idProducto: PlatosCaliente | Types.ObjectId;
+      idProducto: string;
 }
 
 export const CarritoUsuarioSchema = SchemaFactory.createForClass( CarritoUsuario );

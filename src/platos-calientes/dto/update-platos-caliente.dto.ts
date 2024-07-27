@@ -17,8 +17,6 @@ export class UpdatePlatosCalienteDto extends PartialType(CreatePlatosCalienteDto
     precio?:number;
 
     @IsNumber()
-    @IsPositive()
-    @Min(1)
     @IsOptional()
     cantRestante?:number;
 

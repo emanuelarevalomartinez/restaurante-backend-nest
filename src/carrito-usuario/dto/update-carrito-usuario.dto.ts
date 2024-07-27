@@ -4,6 +4,9 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCarritoUsuarioDto extends PartialType(CreateCarritoUsuarioDto) {
 
+    @IsString()
+    @IsOptional()
+    idProducto?:string;
 
     @IsString()
     @IsOptional()

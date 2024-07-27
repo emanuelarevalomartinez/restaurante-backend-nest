@@ -31,11 +31,11 @@ export class CarritoUsuarioController {
     return this.carritoUsuarioService.findOne(+id);
   }
 
-  @Patch(':idCarrito')
+  @Patch(':idProducto')
   actualizarElementosDelCarrito(
-    @Param('idCarrito',ParseUUIDPipe) idCarrito: string,
+    @Param('idProducto',ParseUUIDPipe) idProducto: string,
     @Body() updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
-    return this.carritoUsuarioService.actualizarCarrito(idCarrito, updateCarritoUsuarioDto);
+    return this.carritoUsuarioService.actualizarCarrito(idProducto, updateCarritoUsuarioDto);
   }
 
   @Delete(':id')

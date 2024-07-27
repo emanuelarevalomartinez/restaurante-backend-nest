@@ -1,7 +1,7 @@
 
 
 export interface RegisterUserResponse {
-    id: string;
+    idUsuario: string;
     nombre: string;
     email: string;
     token: string;

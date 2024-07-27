@@ -30,19 +30,19 @@ export class UsuarioController {
   findAll() {
     return this.usuarioService.findAllUsuario();
   }
-  @Get(':id')
-  findOne(@Param('id') id: ParseUUIDPipe) {
-    return this.usuarioService.findOneUsuario(id);
+  @Get(':idUsuario')
+  findOne(@Param('idUsuario') idUsuario: ParseUUIDPipe) {
+    return this.usuarioService.findOneUsuario(idUsuario);
   }
 
 
-  @Patch(':id')
-  update(@Param('id') id: ParseUUIDPipe, @Body() updateUsuarioDto: UpdateUsuarioDto) {
-    return this.usuarioService.updateUsuario(id, updateUsuarioDto);
+  @Patch(':idUsuario')
+  update(@Param('idUsuario') idUsuario: ParseUUIDPipe, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+    return this.usuarioService.updateUsuario(idUsuario, updateUsuarioDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: ParseUUIDPipe) {
-    return this.usuarioService.removeUsuario( id );
+  @Delete(':idUsuario')
+  remove(@Param('idUsuario') idUsuario: ParseUUIDPipe) {
+    return this.usuarioService.removeUsuario( idUsuario );
   }
 }

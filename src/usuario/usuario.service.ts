@@ -35,14 +35,14 @@ export class UsuarioService {
       this.validateRoles(createUsuarioDto.roles);
       const usuario = await this.usuarioModel.create({
         ...datosDeUsuarioDto,
-        id: UUID(),
+        idUsuario: UUID(),
         password: bycrypt.hashSync( password, 10 )
       });
       return {
-        id: usuario.id,
+        idUsuario: usuario.idUsuario,
         nombre: usuario.nombre,
         email: usuario.email,
-        token: this.getJwToken( { id: usuario.id } ),
+        token: this.getJwToken( { id: usuario.idUsuario } ),
       };
     } catch (error) {
       this.handleDatabaseError(error);
@@ -67,10 +67,10 @@ export class UsuarioService {
     }
 
     return {
-      id: usuario.id,
+      idUsuario: usuario.idUsuario,
       nombre: usuario.nombre,
       email: usuario.email,
-      token: this.getJwToken( { id: usuario.id } ),
+      token: this.getJwToken( { id: usuario.idUsuario } ),
     };
   }
 
@@ -78,12 +78,12 @@ export class UsuarioService {
     return await this.usuarioModel.find().lean();
   }
 
-  async findOneUsuario(id: ParseUUIDPipe) {
+  async findOneUsuario(idUsuario: ParseUUIDPipe) {
 
-    const user = await this.usuarioModel.findOne( { id } ).lean()
+    const user = await this.usuarioModel.findOne( { idUsuario } ).lean()
 
     if(!user){
-      return new NotFoundException(`User with that id ${id} does not exist`).getResponse();
+      return new NotFoundException(`User with that id ${idUsuario} does not exist`).getResponse();
     } else {
       const { _id, __v, ...rest } = user;
       return rest;
@@ -92,8 +92,8 @@ export class UsuarioService {
   }
 
 
-  async updateUsuario(id: ParseUUIDPipe, updateUsuarioDto: UpdateUsuarioDto) {
-    const nuevoUsuario = await this.usuarioModel.findOne( {id:id} );
+  async updateUsuario(idUsuario: ParseUUIDPipe, updateUsuarioDto: UpdateUsuarioDto) {
+    const nuevoUsuario = await this.usuarioModel.findOne( {idUsuario:idUsuario} );
 
     if(!nuevoUsuario){
      return new BadRequestException("User  with that id can not update, does not exist")
@@ -110,13 +110,13 @@ export class UsuarioService {
 
   }
 
-  async removeUsuario(id: ParseUUIDPipe) {
+  async removeUsuario(idUsuario: ParseUUIDPipe) {
 
-   await this.carritoModel.deleteMany({ idUsuario: id });
+   await this.carritoModel.deleteMany({ idUsuario: idUsuario });
 
-    const { deletedCount } = await this.usuarioModel.deleteOne({ id: id });
+    const { deletedCount } = await this.usuarioModel.deleteOne({ idUsuario: idUsuario });
     if(deletedCount == 0){
-       throw new NotFoundException(`User whit id: ${id} not found`);
+       throw new NotFoundException(`User whit id: ${idUsuario} not found`);
     }
     return;
   }

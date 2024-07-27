@@ -12,7 +12,7 @@ export class Usuario extends Document {
         unique: true,
         isRequired: true,
     })
-    id:string;
+    idUsuario:string;
 
     @Prop({
         isRequired: true,

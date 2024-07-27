@@ -86,11 +86,10 @@ export class CarritoUsuarioService {
     return `This action returns a #${id} carritoUsuario`;
   }
 
-  async actualizarCarrito(idCarrito: string, updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
-
+  async actualizarCarrito(idProducto: string, updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
     try {
         const carritoAActualizar = await this.carritoUsuarioModel.findOneAndUpdate(
-          { idCarrito: idCarrito },
+          { idProducto: idProducto },
           updateCarritoUsuarioDto,
           { new: true }
         );
