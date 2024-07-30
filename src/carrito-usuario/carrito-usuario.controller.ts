@@ -26,20 +26,31 @@ export class CarritoUsuarioController {
     return this.carritoUsuarioService.findAllCarritoCompra(idUsuario);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.carritoUsuarioService.findOne(+id);
+  @Get('obtenerUnCarrito/:idCarrito')
+  buscarCarrito(@Param('idCarrito',ParseUUIDPipe) id: string) {
+    return this.carritoUsuarioService.buscarUnCarrito(id);
   }
 
-  @Patch(':idProducto')
+  @Patch(':idUsuario/:idProducto')
   actualizarElementosDelCarrito(
+    @Param('idUsuario',ParseUUIDPipe) idUsuario: string,
     @Param('idProducto',ParseUUIDPipe) idProducto: string,
     @Body() updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
-    return this.carritoUsuarioService.actualizarCarrito(idProducto, updateCarritoUsuarioDto);
+    return this.carritoUsuarioService.actualizarCarrito(idUsuario,idProducto, updateCarritoUsuarioDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id',ParseUUIDPipe) id: string) {
-    return this.carritoUsuarioService.removeCarritoCompra(id);
+  @Delete('viaUsuario/:idUsuario/:idProducto')
+  removeViaUsuario(
+    @Param('idUsuario',ParseUUIDPipe) idUsuario: string,
+    @Param('idProducto',ParseUUIDPipe) idProducto: string,
+  ) {
+    return this.carritoUsuarioService.removeCarritoCompraViaUsuario(idUsuario,idProducto);
+  }
+
+  @Delete(':idCarrito')
+  remove(
+    @Param('idCarrito',ParseUUIDPipe) idCarrito: string,
+  ) {
+    return this.carritoUsuarioService.removeCarritoCompra(idCarrito);
   }
 }

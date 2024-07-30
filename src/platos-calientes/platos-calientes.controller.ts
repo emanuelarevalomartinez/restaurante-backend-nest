@@ -18,14 +18,25 @@ export class PlatosCalientesController {
     return this.platosCalientesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id',ParseUUIDPipe) id: string) {
-    return this.platosCalientesService.findOne(+id);
+  @Get(':idPlato')
+  obtenerRestantes(@Param('idPlato',ParseUUIDPipe) idPlato: string) {
+    return this.platosCalientesService.obtenerCantidadRestante(idPlato);
+  }
+  @Get('obtenerUno/:idPlato')
+  fineOne(@Param('idPlato',ParseUUIDPipe) idPlato: string) {
+    return this.platosCalientesService.fineOne(idPlato);
   }
 
   @Patch(':id')
   update(@Param('id',ParseUUIDPipe) id: string, @Body() updatePlatosCalienteDto: UpdatePlatosCalienteDto) {
     return this.platosCalientesService.update(id, updatePlatosCalienteDto);
+  }
+  @Patch('updateWhitPedido/:id/:cantidad')
+  updateWhitPedido(
+    @Param('id',ParseUUIDPipe) id: string,
+    @Param('cantidad') cantidad: number, 
+  ) {
+    return this.platosCalientesService.updateByPedido(id,cantidad);
   }
 
   @Delete(':id')

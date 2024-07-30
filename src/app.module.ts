@@ -5,7 +5,6 @@ import { PlatosCalientesModule } from './platos-calientes/platos-calientes.modul
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ImagesModule } from './images/images.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { PlatosFriosModule } from './platos-frios/platos-frios.module';
 import { BebidasModule } from './bebidas/bebidas.module';
@@ -23,7 +22,6 @@ import { CarritoUsuarioModule } from './carrito-usuario/carrito-usuario.module';
       }),
       MongooseModule.forRoot(`${process.env.DB_PROTOCOL}://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`),
     PlatosCalientesModule,
-    ImagesModule,
     UsuarioModule,
     PlatosFriosModule,
     BebidasModule,

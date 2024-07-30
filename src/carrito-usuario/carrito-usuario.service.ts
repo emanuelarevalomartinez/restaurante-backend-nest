@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, ParseUUIDPipe } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, ParseUUIDPipe } from '@nestjs/common';
 import { CreateCarritoUsuarioDto } from './dto/create-carrito-usuario.dto';
 import { UpdateCarritoUsuarioDto } from './dto/update-carrito-usuario.dto';
 import { Model } from 'mongoose';
@@ -30,7 +30,7 @@ export class CarritoUsuarioService {
 
     let tipoProd: string ="";
 
-    const findUser = await this.usuarioModel.findOne( { id: idUsuario } );
+    const findUser = await this.usuarioModel.findOne( { idUsuario: idUsuario } );
     const findProducto = await this.platosCalientesModel.findOne( { id: idProducto } );
 
     if( !findUser ){
@@ -38,11 +38,11 @@ export class CarritoUsuarioService {
     }
 
     if( findProducto ){
-      tipoProd ="plato-Caliente";
+      tipoProd ="Plato Caliente";
     }
 
     const updateUsuario = await this.usuarioModel.updateOne(
-      { id: findUser.id },
+      { idUsuario: findUser.idUsuario },
       { $push: { carritos: createCarritoUsuarioDto } }
     );
 
@@ -56,7 +56,7 @@ export class CarritoUsuarioService {
      const carritoUsuario = await this.carritoUsuarioModel.create({
        ...createCarritoU,
        idCarrito: UUID(),
-       idUsuario: findUser.id,
+       idUsuario: findUser.idUsuario,
        idProducto: findProducto.id,
        tipoProducto: tipoProd,
      });
@@ -82,37 +82,84 @@ export class CarritoUsuarioService {
   }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} carritoUsuario`;
-  }
-
-  async actualizarCarrito(idProducto: string, updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
+  async buscarUnCarrito(idCarrito: string) {
     try {
-        const carritoAActualizar = await this.carritoUsuarioModel.findOneAndUpdate(
-          { idProducto: idProducto },
-          updateCarritoUsuarioDto,
-          { new: true }
-        );
-  
-        if (!carritoAActualizar) {
-          throw new BadRequestException('El carrito a actualizar no fue encontrado');
-        }
-  
-        return carritoAActualizar;
 
+      const unCarrito = await this.carritoUsuarioModel.findOne({ idCarrito: idCarrito });
+      return unCarrito;
     } catch (error) {
-        console.log(`error al actualizar el carrito ${error}`);
-        
+      throw new BadRequestException(`Carrito with id${idCarrito} does nort exist`);
     }
-
-    return `This action updates a #id carritoUsuario`;
   }
 
-  async removeCarritoCompra(id: string) {
+  // async actualizarCarrito(idUsuario: string,idProducto: string, updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
+  //   try {
+  //       const carritoAActualizar = await this.carritoUsuarioModel.findOneAndUpdate(
+  //         { 
+  //           idUsuario: idUsuario ,
+  //           idProducto: idProducto,
+  //         },
+  //         updateCarritoUsuarioDto,
+  //         { new: true }
+  //       );
+  
+  //       if (!carritoAActualizar) {
+  //         throw new BadRequestException('El carrito a actualizar no fue encontrado');
+  //       }
+  
+  //       return carritoAActualizar;
 
-    const { deletedCount } = await this.carritoUsuarioModel.deleteOne({idCarrito:id});
+  //   } catch (error) {
+  //       console.log(`error al actualizar el carrito ${error}`);
+        
+  //   }
+  // }
+
+  async actualizarCarrito(idUsuario: string, idProducto: string, updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
+    try {
+      const carritoAActualizar = await this.carritoUsuarioModel.findOneAndUpdate(
+        { 
+          idUsuario: idUsuario,
+          idProducto: idProducto,
+        },
+        updateCarritoUsuarioDto,
+        { new: true }
+      );
+  
+      if (!carritoAActualizar) {
+        throw new BadRequestException('El carrito a actualizar no fue encontrado');
+      }
+  
+      return carritoAActualizar;
+    } catch (error) {
+      console.error(`Error al actualizar el carrito: ${error.message}`);
+      throw new InternalServerErrorException('Error al actualizar el carrito');
+    }
+  }
+  
+
+  async removeCarritoCompraViaUsuario(idUsuario: string,idProducto: string) {
+
+    const { deletedCount } = await this.carritoUsuarioModel.deleteOne(
+      {
+      idUsuario: idUsuario,
+      idProducto: idProducto,
+      }
+      );
     if(deletedCount == 0){
-      throw new BadRequestException(`Shop-car ${id} no encontrado`);
+      throw new BadRequestException(`Shop-car ${idUsuario} or ${idProducto} no encontrado`);
+   }
+   return;
+  }
+  async removeCarritoCompra(idCarrito: string) {
+
+    const { deletedCount } = await this.carritoUsuarioModel.deleteOne(
+      {
+      idCarrito: idCarrito,
+      }
+      );
+    if(deletedCount == 0){
+      throw new BadRequestException(`Shop-car ${idCarrito} no encontrado`);
    }
    return;
   }

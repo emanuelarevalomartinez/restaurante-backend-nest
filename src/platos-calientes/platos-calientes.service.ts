@@ -41,18 +41,26 @@ export class PlatosCalientesService {
       const platosConImagen = platos.filter(plato => plato.imagenAsociada && typeof plato.imagenAsociada === 'string');
       return platosConImagen.map(plato => ({
        ...plato.toObject(),
-        imagenAsociada: `http://localhost:3000/images/${plato.imagenAsociada}`
+        imagenAsociada: `http://localhost:3000/images/platosCalientes/${plato.imagenAsociada}`
       }));
     });
   }
 
-  async findOne(id: number) {
-    let platoCaliente:PlatosCaliente;
+  async fineOne(idPlato: string){
      try {
-    platoCaliente = await this.platoCalienteModel.findOne({ id: id });
-    return platoCaliente;
+      const unPlato = this.platoCalienteModel.findOne( { id: idPlato } );
+      return unPlato;
      } catch (error) {
-        throw new NotFoundException(`Plato caliente with id ${id} not found`);
+       throw new BadRequestException(` plato with id ${idPlato} not found `);
+     }
+  }
+
+  async obtenerCantidadRestante(idPlato: string) {
+    try {
+       let platoCaliente:PlatosCaliente = await this.platoCalienteModel.findOne({ id: idPlato });
+       return Number(platoCaliente.cantRestante);
+     } catch (error) {
+        throw new NotFoundException(`Plato caliente with id ${idPlato} not found`);
      }
   }
 
@@ -69,6 +77,51 @@ export class PlatosCalientesService {
         throw new BadRequestException("Plato-Caliente can not update");
     }
   }
+  // async updateByPedido(id: string,cantidad: number) {
+
+
+  //   try {
+
+  //    const nuevo:number = await this.findOne(id);
+
+  //     const upPLatoCa = await this.platoCalienteModel.findOneAndUpdate(
+  //       { id: id },
+  //       // { 
+  //       //   cantRestante: nuevo + cantidad,
+  //       //  },
+  //       { $set: { cantRestante: nuevo + cantidad } }, 
+  //       { new: true },
+  //       );
+  //     return upPLatoCa;
+  //   } catch (error) {
+  //       throw new BadRequestException("Plato-Caliente can not update");
+  //   }
+  // }
+
+  async updateByPedido(id: string, cantidad: number) {
+    try {
+      const nuevo: number = await this.obtenerCantidadRestante(id);
+      const cantidadNumero: number = Number(cantidad);
+
+      
+      
+      if (isNaN(nuevo) || isNaN(cantidadNumero)) {
+        throw new Error("Valores no numéricos encontrados");
+      }
+      const upPLatoCa = await this.platoCalienteModel.findOneAndUpdate(
+        { id: id },
+        { 
+          cantRestante: nuevo + cantidadNumero,
+        },
+        { new: true },
+      );
+      
+      return upPLatoCa;
+    } catch (error) {
+      throw new BadRequestException("Plato-Caliente can not update");
+    }
+  }
+  
 
   remove(id: number) {
     return `This action removes a #${id} platosCaliente`;
