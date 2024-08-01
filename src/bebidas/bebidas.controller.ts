@@ -22,9 +22,17 @@ export class BebidasController {
     return this.bebidasService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBebidaDto: UpdateBebidaDto) {
-    return this.bebidasService.update(+id, updateBebidaDto);
+  @Patch(':idBebida')
+  update(@Param('idBebida') idBebida: string, @Body() updateBebidaDto: UpdateBebidaDto) {
+    return this.bebidasService.update(idBebida, updateBebidaDto);
+  }
+
+  @Patch('updateWhitBebida/:id/:cantidad')
+  updateWhitPedido(
+    @Param('id') id: string,
+    @Param('cantidad') cantidad: number,
+     ) {
+    return this.bebidasService.updateByPedido(id,cantidad);
   }
 
   @Delete(':id')

@@ -20,10 +20,6 @@ export class CarritoUsuario extends Document{
     @Prop({
         required:true,
     })
-    cantidad: number;
-    @Prop({
-        required:true,
-    })
     montoTotal: number;
     @Prop({
         required:true,

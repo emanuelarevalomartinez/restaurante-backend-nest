@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { v4 as UUID } from 'uuid'
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { PlatosCaliente } from 'src/platos-calientes/entities/platos-caliente.entity';
+import { Bebida } from 'src/bebidas/entities/bebida.entity';
 
 @Injectable()
 export class CarritoUsuarioService {
@@ -21,6 +22,8 @@ export class CarritoUsuarioService {
 
     @InjectModel( PlatosCaliente.name )
     private readonly platosCalientesModel: Model<PlatosCaliente>,
+    @InjectModel( Bebida.name )
+    private readonly bebidasModel: Model<Bebida>,
   ){
 
   }
@@ -29,17 +32,24 @@ export class CarritoUsuarioService {
   async crearCarritoCompra(idUsuario: string,idProducto: string,createCarritoUsuarioDto: CreateCarritoUsuarioDto) {
 
     let tipoProd: string ="";
+    let idNuevoProducto:string ="";
 
     const findUser = await this.usuarioModel.findOne( { idUsuario: idUsuario } );
-    const findProducto = await this.platosCalientesModel.findOne( { id: idProducto } );
+    const findPlatoCaliente = await this.platosCalientesModel.findOne( { id: idProducto } );
+    const findBebida = await this.bebidasModel.findOne( { idBebida: idProducto } );
 
     if( !findUser ){
        throw new BadRequestException(" User with idUser does not exist ");
     }
 
-    if( findProducto ){
+    if( findPlatoCaliente ){
       tipoProd ="Plato Caliente";
-    }
+      idNuevoProducto= findPlatoCaliente.id;
+    } 
+    if( findBebida ){
+      tipoProd ="Bebida";
+      idNuevoProducto = findBebida.idBebida;
+    } 
 
     const updateUsuario = await this.usuarioModel.updateOne(
       { idUsuario: findUser.idUsuario },
@@ -57,7 +67,7 @@ export class CarritoUsuarioService {
        ...createCarritoU,
        idCarrito: UUID(),
        idUsuario: findUser.idUsuario,
-       idProducto: findProducto.id,
+       idProducto: idNuevoProducto,
        tipoProducto: tipoProd,
      });
      return carritoUsuario;
@@ -89,6 +99,19 @@ export class CarritoUsuarioService {
       return unCarrito;
     } catch (error) {
       throw new BadRequestException(`Carrito with id${idCarrito} does nort exist`);
+    }
+  }
+  async buscarUnCarroPorUsuario(idUsuario: string,idProducto: string) {
+    try {
+
+      const unCarrito = await this.carritoUsuarioModel.findOne(
+        { idUsuario: idUsuario ,
+          idProducto: idProducto,
+        }
+        );
+      return unCarrito;
+    } catch (error) {
+      throw new BadRequestException(`Carrito with id${idUsuario} or ${idProducto} does nort exist`);
     }
   }
 

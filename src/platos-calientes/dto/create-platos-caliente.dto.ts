@@ -1,8 +1,8 @@
-import { IsNumber, IsOptional, IsPositive, IsString, Min, MinLength } from "class-validator";
+import { IsNumber, IsPositive, IsString, Min, MinLength } from "class-validator";
 
 export class CreatePlatosCalienteDto {
     
-    id:string;
+ 
 
     @IsString()
     @MinLength(1)
@@ -19,7 +19,6 @@ export class CreatePlatosCalienteDto {
     cantRestante:number;
 
     @IsString()
-    @IsOptional()
     @MinLength(1)
     imagenAsociada:string;
 }

@@ -12,9 +12,6 @@ export class UpdateCarritoUsuarioDto extends PartialType(CreateCarritoUsuarioDto
     @IsOptional()
     descripcion?:string;
 
-    @IsNumber()
-    @IsOptional()
-    cantidad?:number;
 
     @IsNumber()
     @IsOptional()

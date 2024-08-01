@@ -7,6 +7,7 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
 import { Usuario, UsuarioSchema } from 'src/usuario/entities/usuario.entity';
 import { PlatosCalientesModule } from 'src/platos-calientes/platos-calientes.module';
 import { PlatosCaliente, PlatosCalientesSchema } from 'src/platos-calientes/entities/platos-caliente.entity';
+import { Bebida, BebidasSchema } from 'src/bebidas/entities/bebida.entity';
 
 
 
@@ -24,6 +25,10 @@ import { PlatosCaliente, PlatosCalientesSchema } from 'src/platos-calientes/enti
       {
       name: PlatosCaliente.name,
       schema: PlatosCalientesSchema,
+    },
+      {
+      name: Bebida.name,
+      schema: BebidasSchema,
     },
   ]),
   UsuarioModule,

@@ -8,10 +8,6 @@ export class CreateCarritoUsuarioDto {
     @IsNotEmpty()
     descripcion:string;
 
-    @IsNumber()
-    @Min(1)
-    @IsNotEmpty()
-    cantidad:number;
 
     @IsNumber()
     @Min(1)

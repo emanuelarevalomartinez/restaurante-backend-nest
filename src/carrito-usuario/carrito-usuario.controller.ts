@@ -30,6 +30,14 @@ export class CarritoUsuarioController {
   buscarCarrito(@Param('idCarrito',ParseUUIDPipe) id: string) {
     return this.carritoUsuarioService.buscarUnCarrito(id);
   }
+  
+  @Get(':idUsuario/:idProducto')
+  buscarUnCarro(
+    @Param('idUsuario',ParseUUIDPipe) idUsuario: string,
+    @Param('idProducto',ParseUUIDPipe) idProducto: string,
+  ) {
+    return this.carritoUsuarioService.buscarUnCarroPorUsuario(idUsuario,idProducto);
+  }
 
   @Patch(':idUsuario/:idProducto')
   actualizarElementosDelCarrito(

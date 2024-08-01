@@ -18,12 +18,10 @@ export class PlatosCalientesService {
 
   async create(createPlatosCalienteDto: CreatePlatosCalienteDto) {
     try {
-
-      const { id, ...nuevoPlato } = createPlatosCalienteDto;
       
       const platoCaliente = await this.platoCalienteModel.create({
-         ...nuevoPlato,
-         id: UUID(),
+        id: UUID(),
+         ...createPlatosCalienteDto,
       });
       return platoCaliente; 
     } catch (error) {
@@ -74,7 +72,7 @@ export class PlatosCalientesService {
         );
       return upPLatoCa;
     } catch (error) {
-        throw new BadRequestException("Plato-Caliente can not update");
+        throw new BadRequestException("Plato-Caliente can not update by id");
     }
   }
   // async updateByPedido(id: string,cantidad: number) {
@@ -104,10 +102,6 @@ export class PlatosCalientesService {
       const cantidadNumero: number = Number(cantidad);
 
       
-      
-      if (isNaN(nuevo) || isNaN(cantidadNumero)) {
-        throw new Error("Valores no numéricos encontrados");
-      }
       const upPLatoCa = await this.platoCalienteModel.findOneAndUpdate(
         { id: id },
         { 
@@ -118,7 +112,7 @@ export class PlatosCalientesService {
       
       return upPLatoCa;
     } catch (error) {
-      throw new BadRequestException("Plato-Caliente can not update");
+      throw new BadRequestException("Plato-Caliente can not update by id pedido");
     }
   }
   
