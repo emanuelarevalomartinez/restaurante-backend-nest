@@ -35,13 +35,9 @@ constructor(
 
     try {
 
-      return this.bebidasModel.find().select({
+      return await this.bebidasModel.find().select({
         _id: 0,
-        idBebida: 1,
-        descripcionBebida: 1,
-        precio: 1,
-        cantRestante: 1,
-        imagenAsociada: 1,
+        __v:0,
       })
       .then( bebidas=> {
         const bebidasConImagenes = bebidas.filter( bebida=> bebida.imagenAsociada && typeof bebida.imagenAsociada === "string" );

@@ -35,7 +35,7 @@ export class PlatosCalientesService {
   }
 
   async findAll() {
-    return this.platoCalienteModel.find().then(platos => {
+    return await this.platoCalienteModel.find().select({ _id:0, __v:0, }).then(platos => {
       const platosConImagen = platos.filter(plato => plato.imagenAsociada && typeof plato.imagenAsociada === 'string');
       return platosConImagen.map(plato => ({
        ...plato.toObject(),
