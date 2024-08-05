@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, ParseBoolPipe } from '@nestjs/common';
 import { PlatosCalientesService } from './platos-calientes.service';
 import { CreatePlatosCalienteDto } from './dto/create-platos-caliente.dto';
 import { UpdatePlatosCalienteDto } from './dto/update-platos-caliente.dto';
@@ -12,10 +12,11 @@ export class PlatosCalientesController {
     return this.platosCalientesService.create(createPlatosCalienteDto);
   }
 
-  @Get()
+  @Get(':ordenAsc?')
   findAll(
-  ) {
-    return this.platosCalientesService.findAll();
+    @Param('ordenAsc', new ParseBoolPipe({ optional: true })) ordenAsc?: boolean
+    ) {
+    return this.platosCalientesService.findAll(ordenAsc);
   }
 
   @Get(':idPlato')

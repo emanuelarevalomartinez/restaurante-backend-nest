@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostreDto } from './dto/create-postre.dto';
 import { UpdatePostreDto } from './dto/update-postre.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -28,21 +28,27 @@ constructor(
    }
   }
 
-  async findAll() {
+  async findAll(ordenAsc?: boolean) {
+    let ordenAMostrar: 1 | -1 = 1;
+    if (typeof ordenAsc !== 'undefined') {
+      ordenAMostrar = ordenAsc ? 1 : -1;
+    }
+
     try {
-      return await this.postresModule.find().select({
-        _id: 0,
-        __v:0,
-      })
-      .then( postres=> {
-        const postresConImagenes = postres.filter( postre=> postre.imagenAsociada && typeof postre.imagenAsociada === "string" );
-          return postresConImagenes.map(postre => ({
-         ...postre.toObject(),
-          imagenAsociada: `http://localhost:3000/images/postres/${postre.imagenAsociada}`
-        }));
-      } )
+      
+      const postres = await this.postresModule.find().sort({ descripcionPostre: ordenAMostrar }).select({ _id: 0, __v: 0 });
+      const totalDeProductos = await this.postresModule.countDocuments();
+  
+      const postresConImagen = postres.filter(postre => postre.imagenAsociada && typeof postre.imagenAsociada === 'string').map(postre => ({
+        ...postre.toObject(),
+        imagenAsociada: `http://localhost:3000/images/postres/${postre.imagenAsociada}`
+      }));
+  
+      return { postres: postresConImagen, totalDeProductos };
+
+      
     } catch (error) {
-      throw new BadRequestException("All postres can not find");
+      throw new BadRequestException("All platos calientes can not find");
     }
   }
 
@@ -50,8 +56,45 @@ constructor(
     return `This action returns a #${id} postre`;
   }
 
-  update(id: number, updatePostreDto: UpdatePostreDto) {
-    return `This action updates a #${id} postre`;
+  async obtenerCantidadRestante(idPostre: string) {
+    try {
+       let postre = await this.postresModule.findOne({ idPostre: idPostre });
+       return Number(postre.cantRestante);
+     } catch (error) {
+        throw new NotFoundException(`Postre with id ${idPostre} not found`);
+     }
+  }
+
+  async update(idPostre: string, updatePostreDto: UpdatePostreDto) {
+    try {
+
+      const upPostre = await this.postresModule.findOneAndUpdate(
+         { idPostre: idPostre } ,
+        updatePostreDto,
+        { new: true },
+        );
+        return upPostre;
+      
+    } catch (error) {
+      throw new BadRequestException("Postre can not update");
+    }
+   
+  }
+
+  async updateByPedido(idPostre: string, cantidad: number){
+    try {
+      const nuevo: number = await this.obtenerCantidadRestante(idPostre);
+      const cantidadNumero: number = Number(cantidad);
+      
+      const upPostre = this.postresModule.findOneAndUpdate( 
+        { idPostre: idPostre },
+        { cantRestante: nuevo + cantidadNumero},
+        {new: true},
+        );
+         return upPostre;
+     } catch (error) {
+      throw new BadRequestException(`Postre can not update by pedido ${error}`);
+     }
   }
 
   remove(id: number) {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe } from '@nestjs/common';
 import { PostresService } from './postres.service';
 import { CreatePostreDto } from './dto/create-postre.dto';
 import { UpdatePostreDto } from './dto/update-postre.dto';
@@ -12,9 +12,11 @@ export class PostresController {
     return this.postresService.create(createPostreDto);
   }
 
-  @Get()
-  findAll() {
-    return this.postresService.findAll();
+  @Get(':ordenAsc?')
+  findAll(
+    @Param('ordenAsc', new ParseBoolPipe({ optional: true })) ordenAsc?: boolean
+    ) {
+    return this.postresService.findAll(ordenAsc);
   }
 
   @Get(':id')
@@ -22,9 +24,20 @@ export class PostresController {
     return this.postresService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostreDto: UpdatePostreDto) {
-    return this.postresService.update(+id, updatePostreDto);
+  @Patch(':idPostre')
+  update(
+    @Param('idPostre') idPostre: string,
+     @Body() updatePostreDto: UpdatePostreDto
+     ) {
+    return this.postresService.update(idPostre, updatePostreDto);
+  }
+
+  @Patch('updateWhitPostre/:idPostre/:cantidad')
+  updateWhitPedido(
+    @Param('idPostre') idPostre: string,
+    @Param('cantidad') cantidad: number,
+     ) {
+    return this.postresService.updateByPedido(idPostre, cantidad);
   }
 
   @Delete(':id')

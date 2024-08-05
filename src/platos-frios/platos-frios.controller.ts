@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe } from '@nestjs/common';
 import { PlatosFriosService } from './platos-frios.service';
 import { CreatePlatosFrioDto } from './dto/create-platos-frio.dto';
 import { UpdatePlatosFrioDto } from './dto/update-platos-frio.dto';
@@ -12,9 +12,11 @@ export class PlatosFriosController {
     return this.platosFriosService.create(createPlatosFrioDto);
   }
 
-  @Get()
-  findAll() {
-    return this.platosFriosService.findAll();
+  @Get(':ordenAsc?')
+  findAll(
+    @Param('ordenAsc', new ParseBoolPipe({ optional: true })) ordenAsc?: boolean
+    ) {
+    return this.platosFriosService.findAll(ordenAsc);
   }
 
   @Get(':id')
@@ -22,9 +24,19 @@ export class PlatosFriosController {
     return this.platosFriosService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlatosFrioDto: UpdatePlatosFrioDto) {
-    return this.platosFriosService.update(+id, updatePlatosFrioDto);
+  @Patch(':idPlatoFrio')
+  update(
+    @Param('idPlatoFrio') idPlatoFrio: string, 
+    @Body() updatePlatosFrioDto: UpdatePlatosFrioDto
+    ) {
+    return this.platosFriosService.update(idPlatoFrio, updatePlatosFrioDto);
+  }
+  @Patch('updateWhitPLatoFrio/:id/:cantidad')
+  updateWhitPedido(
+    @Param('idPlatoFrio') idPlatoFrio: string, 
+    @Param('cantidad') cantidad: number, 
+    ) {
+    return this.platosFriosService.updateByPedido(idPlatoFrio, cantidad);
   }
 
   @Delete(':id')

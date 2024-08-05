@@ -13,6 +13,7 @@ export class Bebida extends Document{
 
     @Prop({
       isRequired: true,  
+      unique:true,
     })
     descripcionBebida:string;
 

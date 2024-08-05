@@ -12,6 +12,7 @@ export class PlatosCaliente extends Document {
 
     @Prop({
       isRequired: true,  
+      unique:true,
     })
     descripcionPlato:string;
 

@@ -34,15 +34,70 @@ export class PlatosCalientesService {
     }
   }
 
-  async findAll() {
-    return await this.platoCalienteModel.find().select({ _id:0, __v:0, }).then(platos => {
-      const platosConImagen = platos.filter(plato => plato.imagenAsociada && typeof plato.imagenAsociada === 'string');
-      return platosConImagen.map(plato => ({
-       ...plato.toObject(),
-        imagenAsociada: `http://localhost:3000/images/platosCalientes/${plato.imagenAsociada}`
+
+  // async findAll(ordenAsc?: boolean) {
+  //   let ordenAMostrar: 1 | -1 = 1;
+
+  //   if (typeof ordenAsc !== 'undefined') {
+  //     ordenAMostrar = ordenAsc ? 1 : -1;
+  //   }
+
+  //   return await this.platoCalienteModel.find()
+  //     .sort({ descripcionPlato: ordenAMostrar })
+  //     .select({ _id: 0, __v: 0 })
+  //     .then(platos => {
+  //       const platosConImagen = platos.filter(plato => plato.imagenAsociada && typeof plato.imagenAsociada === 'string');
+  //       return platosConImagen.map(plato => ({
+  //         ...plato.toObject(),
+  //         imagenAsociada: `http://localhost:3000/images/platosCalientes/${plato.imagenAsociada}`
+  //       }));
+  //     });
+  //   }
+
+  async findAll(ordenAsc?: boolean) {
+    let ordenAMostrar: 1 | -1 = 1;
+    if (typeof ordenAsc !== 'undefined') {
+      ordenAMostrar = ordenAsc ? 1 : -1;
+    }
+
+    try {
+      
+      const platosCalientes = await this.platoCalienteModel.find().sort({ descripcionPlato: ordenAMostrar }).select({ _id: 0, __v: 0 });
+      const totalDeProductos = await this.platoCalienteModel.countDocuments();
+  
+      const platosCalientesConImagen = platosCalientes.filter(platoCaliente => platoCaliente.imagenAsociada && typeof platoCaliente.imagenAsociada === 'string').map(platoCaliente => ({
+        ...platoCaliente.toObject(),
+        imagenAsociada: `http://localhost:3000/images/platosCalientes/${platoCaliente.imagenAsociada}`
       }));
-    });
+  
+      return { platos: platosCalientesConImagen, totalDeProductos };
+
+
+    } catch (error) {
+      throw new BadRequestException("All platos calientes can not find");
+    }
+
   }
+
+
+
+
+  // async findAll(ordenAsc? : boolean) {
+
+  //   let orden = 1;
+
+  //   if (typeof ordenAsc !== 'undefined') {
+  //     orden = ordenAsc ? 1 : -1;
+  //   }
+
+  //   return await this.platoCalienteModel.find().sort({ descripcionPlato: orden}).select({ _id:0, __v:0, }).then(platos => {
+  //     const platosConImagen = platos.filter(plato => plato.imagenAsociada && typeof plato.imagenAsociada === 'string');
+  //     return platosConImagen.map(plato => ({
+  //      ...plato.toObject(),
+  //       imagenAsociada: `http://localhost:3000/images/platosCalientes/${plato.imagenAsociada}`
+  //     }));
+  //   });
+  // }
 
   async fineOne(idPlato: string){
      try {

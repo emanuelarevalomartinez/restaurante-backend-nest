@@ -12,6 +12,7 @@ export class Postre extends Document{
 
     @Prop({
       isRequired: true,  
+      unique:true,
     })
     descripcionPostre:string;
 

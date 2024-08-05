@@ -46,6 +46,11 @@ export class CarritoUsuario extends Document{
         required:true,
       })
       idProducto: string;
+
+      @Prop({
+        isRequired: true,  
+      })
+      fechaUltimaModificacion: Date;
 }
 
 export const CarritoUsuarioSchema = SchemaFactory.createForClass( CarritoUsuario );

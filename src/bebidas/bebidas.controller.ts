@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe } from '@nestjs/common';
 import { BebidasService } from './bebidas.service';
 import { CreateBebidaDto } from './dto/create-bebida.dto';
 import { UpdateBebidaDto } from './dto/update-bebida.dto';
@@ -12,9 +12,11 @@ export class BebidasController {
     return this.bebidasService.create(createBebidaDto);
   }
 
-  @Get()
-  findAll() {
-    return this.bebidasService.findAll();
+  @Get(':ordenAsc?')
+  findAll(
+    @Param('ordenAsc', new ParseBoolPipe({ optional: true })) ordenAsc?: boolean
+    ) {
+    return this.bebidasService.findAll(ordenAsc);
   }
 
   @Get(':id')

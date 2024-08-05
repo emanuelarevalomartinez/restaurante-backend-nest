@@ -31,26 +31,28 @@ constructor(
     }
   }
 
- async findAll() {
+  async findAll(ordenAsc?: boolean) {
+
+    let ordenAMostrar: 1 | -1 = 1;
+    if (typeof ordenAsc !== 'undefined') {
+      ordenAMostrar = ordenAsc ? 1 : -1;
+    }
 
     try {
-
-      return await this.bebidasModel.find().select({
-        _id: 0,
-        __v:0,
-      })
-      .then( bebidas=> {
-        const bebidasConImagenes = bebidas.filter( bebida=> bebida.imagenAsociada && typeof bebida.imagenAsociada === "string" );
-          return bebidasConImagenes.map(bebida => ({
-         ...bebida.toObject(),
-          imagenAsociada: `http://localhost:3000/images/bebidas/${bebida.imagenAsociada}`
-        }));
-      } )
       
-    
+      const bebidas = await this.bebidasModel.find().sort({ descripcionBebida: ordenAMostrar }).select({ _id: 0, __v: 0 });
+      const totalDeProductos = await this.bebidasModel.countDocuments();
+  
+      const bebidasConImagen = bebidas.filter(bebida => bebida.imagenAsociada && typeof bebida.imagenAsociada === 'string').map(bebida => ({
+        ...bebida.toObject(),
+        imagenAsociada: `http://localhost:3000/images/bebidas/${bebida.imagenAsociada}`
+      }));
+  
+      return { bebidas: bebidasConImagen, totalDeProductos };
 
+      
     } catch (error) {
-      throw new BadRequestException("no fue posible obtener las bebidas");
+      throw new BadRequestException("All platos calientes can not find");
     }
   }
 

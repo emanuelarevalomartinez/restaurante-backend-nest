@@ -13,6 +13,7 @@ import { Document } from "mongoose";
 
     @Prop({
       isRequired: true,  
+      unique:true,
     })
     descripcionPlatoFrio:string;
 

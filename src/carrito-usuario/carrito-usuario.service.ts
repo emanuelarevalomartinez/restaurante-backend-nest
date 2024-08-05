@@ -8,6 +8,8 @@ import { v4 as UUID } from 'uuid'
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { PlatosCaliente } from 'src/platos-calientes/entities/platos-caliente.entity';
 import { Bebida } from 'src/bebidas/entities/bebida.entity';
+import { PlatosFrio } from 'src/platos-frios/entities/platos-frio.entity';
+import { Postre } from 'src/postres/entities/postre.entity';
 
 @Injectable()
 export class CarritoUsuarioService {
@@ -22,8 +24,15 @@ export class CarritoUsuarioService {
 
     @InjectModel( PlatosCaliente.name )
     private readonly platosCalientesModel: Model<PlatosCaliente>,
+
+    @InjectModel( PlatosFrio.name )
+    private readonly platosFriosModel: Model<PlatosFrio>,
+
     @InjectModel( Bebida.name )
     private readonly bebidasModel: Model<Bebida>,
+
+    @InjectModel( Postre.name )
+    private readonly postresModel: Model<Postre>,
   ){
 
   }
@@ -36,7 +45,9 @@ export class CarritoUsuarioService {
 
     const findUser = await this.usuarioModel.findOne( { idUsuario: idUsuario } );
     const findPlatoCaliente = await this.platosCalientesModel.findOne( { id: idProducto } );
+    const findPlatoFrio = await this.platosFriosModel.findOne( { idPlatoFrio: idProducto } );
     const findBebida = await this.bebidasModel.findOne( { idBebida: idProducto } );
+    const findPostre = await this.postresModel.findOne( { idPostre: idProducto } );
 
     if( !findUser ){
        throw new BadRequestException(" User with idUser does not exist ");
@@ -46,9 +57,17 @@ export class CarritoUsuarioService {
       tipoProd ="Plato Caliente";
       idNuevoProducto= findPlatoCaliente.id;
     } 
+    if( findPlatoFrio ){
+      tipoProd ="Plato Frio";
+      idNuevoProducto= findPlatoFrio.idPlatoFrio;
+    } 
     if( findBebida ){
       tipoProd ="Bebida";
       idNuevoProducto = findBebida.idBebida;
+    } 
+    if( findPostre ){
+      tipoProd ="Postre";
+      idNuevoProducto = findPostre.idPostre;
     } 
 
     const updateUsuario = await this.usuarioModel.updateOne(
@@ -69,17 +88,18 @@ export class CarritoUsuarioService {
        idUsuario: findUser.idUsuario,
        idProducto: idNuevoProducto,
        tipoProducto: tipoProd,
+       fechaUltimaModificacion: new Date(),
      });
      return carritoUsuario;
 
     } catch (error) {
-      console.log(`error al crear carrito ${error}`);
+      throw new BadRequestException(`error al crear carrito ${error}`);
     }
   }
 
   async findAllCarritoCompra(idUsuario: string) {
   try {
-        const allCarritos = await this.carritoUsuarioModel.find( { idUsuario: idUsuario } );
+        const allCarritos = await this.carritoUsuarioModel.find( { idUsuario: idUsuario } ).sort({ fechaUltimaModificacion: -1 });
     
      if( !allCarritos ){
          throw new BadRequestException("User id is not found");
@@ -87,7 +107,7 @@ export class CarritoUsuarioService {
 
         return allCarritos;
   } catch (error) {
-    console.log(`error al intentar encontrar los carritos ${error}`);
+    throw new BadRequestException(`error al intentar encontrar los carritos ${error}`);
      
   }
   }
@@ -145,7 +165,10 @@ export class CarritoUsuarioService {
           idUsuario: idUsuario,
           idProducto: idProducto,
         },
-        updateCarritoUsuarioDto,
+        {
+          $set: { ...updateCarritoUsuarioDto, 
+            fechaUltimaModificacion: new Date() },
+        },
         { new: true }
       );
   
