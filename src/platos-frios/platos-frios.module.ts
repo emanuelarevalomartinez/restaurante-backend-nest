@@ -13,5 +13,6 @@ import { PlatoFrioSchema, PlatosFrio } from './entities/platos-frio.entity';
   ],
   controllers: [PlatosFriosController],
   providers: [PlatosFriosService],
+  exports: [PlatosFriosService],
 })
 export class PlatosFriosModule {}

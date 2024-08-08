@@ -10,6 +10,10 @@ import { PlatosCaliente, PlatosCalientesSchema } from 'src/platos-calientes/enti
 import { Bebida, BebidasSchema } from 'src/bebidas/entities/bebida.entity';
 import { Postre, PostreSchema } from 'src/postres/entities/postre.entity';
 import { PlatoFrioSchema, PlatosFrio } from 'src/platos-frios/entities/platos-frio.entity';
+import { PlatosCalientesService } from 'src/platos-calientes/platos-calientes.service';
+import { PlatosFriosModule } from 'src/platos-frios/platos-frios.module';
+import { BebidasModule } from 'src/bebidas/bebidas.module';
+import { PostresModule } from 'src/postres/postres.module';
 
 
 
@@ -43,6 +47,9 @@ import { PlatoFrioSchema, PlatosFrio } from 'src/platos-frios/entities/platos-fr
   ]),
   UsuarioModule,
   PlatosCalientesModule,
+  PlatosFriosModule,
+  BebidasModule,
+  PostresModule,
 ],
   controllers: [CarritoUsuarioController],
   providers: [CarritoUsuarioService],

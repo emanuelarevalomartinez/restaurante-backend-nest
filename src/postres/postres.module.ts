@@ -13,5 +13,6 @@ import { Postre, PostreSchema } from './entities/postre.entity';
   ],
   controllers: [PostresController],
   providers: [PostresService],
+  exports: [PostresService],
 })
 export class PostresModule {}

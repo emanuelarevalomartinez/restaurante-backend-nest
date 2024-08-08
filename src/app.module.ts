@@ -13,6 +13,7 @@ import { NotificacionesModule } from './notificaciones/notificaciones.module';
 import { AutenticacionModule } from './autenticacion/autenticacion.module';
 import { ConfigModule } from '@nestjs/config';
 import { CarritoUsuarioModule } from './carrito-usuario/carrito-usuario.module';
+import { CorreosModule } from './correos/correos.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CarritoUsuarioModule } from './carrito-usuario/carrito-usuario.module';
     NotificacionesModule,
     AutenticacionModule,
     CarritoUsuarioModule,
+    CorreosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

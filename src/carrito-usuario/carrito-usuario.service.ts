@@ -10,11 +10,23 @@ import { PlatosCaliente } from 'src/platos-calientes/entities/platos-caliente.en
 import { Bebida } from 'src/bebidas/entities/bebida.entity';
 import { PlatosFrio } from 'src/platos-frios/entities/platos-frio.entity';
 import { Postre } from 'src/postres/entities/postre.entity';
+import { PlatosCalientesService } from 'src/platos-calientes/platos-calientes.service';
+import { PlatosFriosService } from 'src/platos-frios/platos-frios.service';
+import { BebidasService } from 'src/bebidas/bebidas.service';
+import { PostresService } from 'src/postres/postres.service';
 
 @Injectable()
 export class CarritoUsuarioService {
 
   constructor(
+
+    private readonly platosCalientesServices : PlatosCalientesService,
+
+    private readonly platosFriosServices : PlatosFriosService,
+
+    private readonly bebidasServices : BebidasService,
+
+    private readonly postresServices : PostresService,
 
     @InjectModel( CarritoUsuario.name )
     private readonly carritoUsuarioModel: Model<CarritoUsuario>,
@@ -135,6 +147,33 @@ export class CarritoUsuarioService {
     }
   }
 
+  async MontoTodosLosProductos(idUsuario: string){
+     try {
+      const montoTotal = await this.carritoUsuarioModel.find( { idUsuario: idUsuario } ).select({
+        _id: 0,
+        __v: 0,
+        idCarrito: 0,
+        descripcion:0,
+        imagen:0,
+        cantidadAOrdenar:0,
+        tipoProducto:0,
+        idUsuario:0,
+        idProducto:0,
+        fechaUltimaModificacion:0,
+      });
+
+      let sumatoriaMontoTotal = 0;
+      montoTotal.forEach((producto) => {
+          sumatoriaMontoTotal += producto.montoTotal;
+      });
+      return sumatoriaMontoTotal;
+      
+     } catch (error) {
+        throw new BadRequestException(`Monto total can not executed ${error}`)
+        
+     }
+  }
+
   // async actualizarCarrito(idUsuario: string,idProducto: string, updateCarritoUsuarioDto: UpdateCarritoUsuarioDto) {
   //   try {
   //       const carritoAActualizar = await this.carritoUsuarioModel.findOneAndUpdate(
@@ -209,4 +248,42 @@ export class CarritoUsuarioService {
    }
    return;
   }
+
+  async remoreAllCarritosCompra(idUsuario: string) {
+    try {
+      const carritosUsuario = await this.carritoUsuarioModel.find({ idUsuario: idUsuario });
+      for (const carrito of carritosUsuario) {
+        switch (carrito.tipoProducto) {
+          case 'Plato Caliente':
+            await this.platosCalientesServices.updateByPedido(carrito.idProducto, +carrito.cantidadAOrdenar);
+            break;
+          case 'Plato Frio':
+            await this.platosFriosServices.updateByPedido(carrito.idProducto, +carrito.cantidadAOrdenar);
+            break;
+          case 'Bebida':
+            await this.bebidasServices.updateByPedido(carrito.idProducto, +carrito.cantidadAOrdenar);
+            break;
+          case 'Postre':
+            await this.postresServices.updateByPedido(carrito.idProducto, +carrito.cantidadAOrdenar);
+            break;
+          default:
+            throw new BadRequestException('Tipo de producto desconocido');
+        }
+      }
+      const deleteResult = await this.carritoUsuarioModel.deleteMany({ idUsuario: idUsuario });
+  
+      if (deleteResult.deletedCount === 0) {
+        throw new BadRequestException('No se encontraron carritos para eliminar');
+      }
+  
+      return { 
+        message: 'Carritos eliminados exitosamente', 
+        deletedCount: deleteResult.deletedCount 
+      };
+    } catch (error) {
+      throw new BadRequestException(`Error al eliminar todos los carritos: ${error.message}`);
+    }
+  }
+  
+  
 }

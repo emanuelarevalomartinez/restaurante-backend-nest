@@ -36,11 +36,10 @@ export class CarritoUsuario extends Document{
     tipoProducto:string;
 
     @Prop({
-        type: Types.ObjectId,
-        ref: 'Usuario',
+       
         required: true,
       })
-      idUsuario: Usuario | Types.ObjectId;
+      idUsuario: string;
 
       @Prop({
         required:true,

@@ -7,8 +7,6 @@ import { UpdateCarritoUsuarioDto } from './dto/update-carrito-usuario.dto';
 export class CarritoUsuarioController {
   constructor(private readonly carritoUsuarioService: CarritoUsuarioService) {}
 
-  //* me quede en la intercepcion de los carritos entre el backend y el frontend
-  //* manejando el tema del localstorage para usarlo a la  horade añadir elementos y ver como se maneja la lista de el carroto
 
   @Post(":idUsuario/:idProducto")
   crearCarrito(
@@ -30,14 +28,22 @@ export class CarritoUsuarioController {
   buscarCarrito(@Param('idCarrito',ParseUUIDPipe) id: string) {
     return this.carritoUsuarioService.buscarUnCarrito(id);
   }
+
   
   @Get(':idUsuario/:idProducto')
   buscarUnCarro(
     @Param('idUsuario',ParseUUIDPipe) idUsuario: string,
     @Param('idProducto',ParseUUIDPipe) idProducto: string,
-  ) {
-    return this.carritoUsuarioService.buscarUnCarroPorUsuario(idUsuario,idProducto);
-  }
+    ) {
+      return this.carritoUsuarioService.buscarUnCarroPorUsuario(idUsuario,idProducto);
+    }
+
+    @Get('montoTotal/producto/:idUsuario')
+    calcularMontoTotal(
+      @Param('idUsuario') idUsuario: string,
+      ) {
+      return this.carritoUsuarioService.MontoTodosLosProductos(idUsuario);
+    }
 
   @Patch(':idUsuario/:idProducto')
   actualizarElementosDelCarrito(
@@ -60,5 +66,11 @@ export class CarritoUsuarioController {
     @Param('idCarrito',ParseUUIDPipe) idCarrito: string,
   ) {
     return this.carritoUsuarioService.removeCarritoCompra(idCarrito);
+  }
+  @Delete('borrarTodos/:idUsuario')
+  removeALLCarritos(
+    @Param('idUsuario',ParseUUIDPipe) idUsuario: string,
+  ) {
+    return this.carritoUsuarioService.remoreAllCarritosCompra(idUsuario);
   }
 }
