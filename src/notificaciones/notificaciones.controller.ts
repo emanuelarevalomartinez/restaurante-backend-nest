@@ -1,20 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, ParseBoolPipe } from '@nestjs/common';
 import { NotificacionesService } from './notificaciones.service';
-import { CreateNotificacioneDto } from './dto/create-notificacione.dto';
-import { UpdateNotificacioneDto } from './dto/update-notificacione.dto';
+import { CreateNotificacionDto } from './dto/create-notificacion.dto';
+import { UpdateNotificacionDto } from './dto/update-notificacion.dto';
 
 @Controller('notificaciones')
 export class NotificacionesController {
   constructor(private readonly notificacionesService: NotificacionesService) {}
 
-  @Post()
-  create(@Body() createNotificacioneDto: CreateNotificacioneDto) {
-    return this.notificacionesService.create(createNotificacioneDto);
+  @Post(":idUsuario")
+  create(
+    @Param("idUsuario", ParseUUIDPipe) idUsuario: string,
+    @Body() createNotificacioneDto: CreateNotificacionDto,
+  ) {
+    return this.notificacionesService.create(idUsuario,createNotificacioneDto);
   }
 
-  @Get()
-  findAll() {
-    return this.notificacionesService.findAll();
+  @Get("buscarTodos/:idUsuario/:ordenDes?")
+  findAll(
+    @Param("idUsuario",ParseUUIDPipe) idUsuario: string,
+    @Param('ordenDes', new ParseBoolPipe({ optional: true })) ordenDes?: boolean
+  ) {
+    return this.notificacionesService.findAll(idUsuario,ordenDes);
   }
 
   @Get(':id')
@@ -23,12 +29,12 @@ export class NotificacionesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNotificacioneDto: UpdateNotificacioneDto) {
+  update(@Param('id') id: string, @Body() updateNotificacioneDto: UpdateNotificacionDto) {
     return this.notificacionesService.update(+id, updateNotificacioneDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.notificacionesService.remove(+id);
+  @Delete(':idNotificacion')
+  remove(@Param('idNotificacion') idNotificacion: string) {
+    return this.notificacionesService.remove(idNotificacion);
   }
 }

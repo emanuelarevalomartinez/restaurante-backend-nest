@@ -31,7 +31,7 @@ export class PlatosFriosController {
     ) {
     return this.platosFriosService.update(idPlatoFrio, updatePlatosFrioDto);
   }
-  @Patch('updateWhitPLatoFrio/:id/:cantidad')
+  @Patch('updateWhitPLatoFrio/:idPlatoFrio/:cantidad')
   updateWhitPedido(
     @Param('idPlatoFrio') idPlatoFrio: string, 
     @Param('cantidad') cantidad: number, 

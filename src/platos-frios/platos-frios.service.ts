@@ -94,7 +94,7 @@ export class PlatosFriosService {
         );
          return upPLatoFrio;
      } catch (error) {
-      throw new BadRequestException("Plato frio can not update by pedido");
+      throw new BadRequestException( `Plato frio can not update by pedido ${error}`);
      }
   }
 
