@@ -37,4 +37,8 @@ export class NotificacionesController {
   remove(@Param('idNotificacion') idNotificacion: string) {
     return this.notificacionesService.remove(idNotificacion);
   }
+  @Delete('borrarTodas/:idUsuario')
+  removeALL(@Param('idUsuario') idUsuario: string) {
+    return this.notificacionesService.removeAllNotificacionesByUsuario(idUsuario);
+  }
 }

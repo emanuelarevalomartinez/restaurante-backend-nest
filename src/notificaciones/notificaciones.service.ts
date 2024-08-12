@@ -86,4 +86,12 @@ export class NotificacionesService {
      }
      return;
   }
+
+  async removeAllNotificacionesByUsuario(idUsuario: string){
+    const { deletedCount } = await this.notificacionesModel.deleteMany({ idUsuario: idUsuario });
+    if(deletedCount == 0){
+      throw new BadRequestException(`Id de usuario ${idUsuario} no encontrado`);
+   }
+   return;
+  }
 }

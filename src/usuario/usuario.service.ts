@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import { Roles } from './interfaces';
 import * as bycrypt from 'bcrypt'
 import { v4 as UUID } from 'uuid'
-import { LoginResponse, LoginUserDto, RegisterUserResponse } from './dto';
+import { LoginResponse, LoginUserDto, RegisterUserResponse, RegisterUserResponseExist } from './dto';
 import { JwtPayload } from './interfaces/jwt.payload';
 import { JwtService } from '@nestjs/jwt';
 import { CarritoUsuario } from 'src/carrito-usuario/entities/carrito-usuario.entity';
@@ -27,19 +27,52 @@ export class UsuarioService {
 
  }
 
-  async register(createUsuarioDto: CreateUsuarioDto): Promise<RegisterUserResponse> {
+  async register(createUsuarioDto: CreateUsuarioDto): Promise<RegisterUserResponse | RegisterUserResponseExist> {
+
+console.log(createUsuarioDto);
+
+
     try {
 
-     const {  password,...datosDeUsuarioDto } = createUsuarioDto;
+     const { nombre, email,password,...datosDeUsuarioDto } = createUsuarioDto;
 
       this.validateRoles(createUsuarioDto.roles);
+
+      const verificarUnsuarioExiste = await this.usuarioModel.findOne( { nombre:  nombre } );
+
+
+       if(verificarUnsuarioExiste){
+        if(verificarUnsuarioExiste.nombre == nombre){
+
+          return {
+            usuarioExiste: true,
+            emailExiste:false,
+          };
+        }
+       } else {
+
+         const verificarEmailExiste = await this.usuarioModel.findOne( { email: email } );
+  
+         if(verificarEmailExiste){
+            if(verificarEmailExiste.email == email){
+              return {
+                usuarioExiste: false,
+                emailExiste: true,
+              }
+            }
+         }
+       }
+
+
+
       const usuario = await this.usuarioModel.create({
         ...datosDeUsuarioDto,
+        nombre: nombre,
+        email: email,
         idUsuario: UUID(),
         password: bycrypt.hashSync( password, 10 )
       });
       return {
-        idUsuario: usuario.idUsuario,
         nombre: usuario.nombre,
         email: usuario.email,
         token: this.getJwToken( { id: usuario.idUsuario } ),
@@ -54,7 +87,6 @@ export class UsuarioService {
     const {  password } = loginUserDto;
     
     const usuario = await this.usuarioModel.findOne({
-      nombre: loginUserDto.nombre,
       email: loginUserDto.email,
     });
 

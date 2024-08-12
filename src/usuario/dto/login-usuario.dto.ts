@@ -6,10 +6,7 @@ export class LoginUserDto {
 
     idUsuario:string;
 
-    @IsString()
-    @MinLength(1)
-    @IsNotEmpty()
-    nombre:string;
+   
 
     @IsString()
     @MinLength(1)
