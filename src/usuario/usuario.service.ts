@@ -29,9 +29,6 @@ export class UsuarioService {
 
   async register(createUsuarioDto: CreateUsuarioDto): Promise<RegisterUserResponse | RegisterUserResponseExist> {
 
-console.log(createUsuarioDto);
-
-
     try {
 
      const { nombre, email,password,...datosDeUsuarioDto } = createUsuarioDto;

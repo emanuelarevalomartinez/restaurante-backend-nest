@@ -5,10 +5,6 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { LoginUserDto } from './dto';
 
 
-//! HAY QUE CORREGIR EL DEFECTO DE COMO SE MUESTRAN LOS DATOS DEL CARRITO PARA QUE CARGUEN DESDE EL COMIENZO
-//* EL ID DEL USUARIO ESTA ESTATICO HAY QUE PONERLO GENERICO
-//* CREAR UN CONTEXTO PARA LA VALIDACIÓN DEL LOGIN Y EL USO DE ESOS DATOS DESDE EL LOCAL STORAGE
-
 @Controller('usuario')
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
