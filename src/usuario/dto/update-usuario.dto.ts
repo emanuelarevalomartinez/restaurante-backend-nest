@@ -23,6 +23,12 @@ export class UpdateUsuarioDto extends PartialType(CreateUsuarioDto) {
  @IsNotEmpty()
  password?:string;
 
+ @IsString()
+ @IsOptional()
+ @MinLength(1)
+ @IsNotEmpty()
+ newPassword?:string;
+
  @IsArray()
  @IsOptional()
  roles?:Roles[];

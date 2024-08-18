@@ -35,16 +35,6 @@ export class Usuario extends Document {
         default: Roles.user,
     })
     roles?:Roles[];
-
-    
-  @Prop({
-    type: [{ 
-        type: Types.ObjectId, 
-        ref: CarritoUsuario.name, 
-    }],
-    default: [],
-  })
-  carritos: Types.ObjectId[];
     
 }
 

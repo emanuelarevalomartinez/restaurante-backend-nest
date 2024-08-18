@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import { Roles } from './interfaces';
 import * as bycrypt from 'bcrypt'
 import { v4 as UUID } from 'uuid'
-import { LoginResponse, LoginUserDto, RegisterUserResponse, RegisterUserResponseExist } from './dto';
+import { LoginResponse, LoginUserDto, RegisterUserResponse, RegisterUserResponseExist, UsuarioUpdate, UsuarioUpdateError } from './dto';
 import { JwtPayload } from './interfaces/jwt.payload';
 import { JwtService } from '@nestjs/jwt';
 import { CarritoUsuario } from 'src/carrito-usuario/entities/carrito-usuario.entity';
@@ -121,18 +121,71 @@ export class UsuarioService {
   }
 
 
-  async updateUsuario(idUsuario: ParseUUIDPipe, updateUsuarioDto: UpdateUsuarioDto) {
-    const nuevoUsuario = await this.usuarioModel.findOne( {idUsuario:idUsuario} );
+  async updateUsuario(idUsuario: ParseUUIDPipe, updateUsuarioDto: UpdateUsuarioDto): Promise<UsuarioUpdate | UsuarioUpdateError> {
+    const actualizarUsuario = await this.usuarioModel.findOne( {idUsuario:idUsuario} );
 
-    if(!nuevoUsuario){
-     return new BadRequestException("User  with that id can not update, does not exist")
+    if(!actualizarUsuario){
+     throw new BadRequestException("User  with that id can not update, does not exist")
     }
 
     this.validateRoles(updateUsuarioDto.roles);
 
-      try {
-        await nuevoUsuario.updateOne(updateUsuarioDto);
-        return { ...nuevoUsuario.toObject(), ...updateUsuarioDto };
+    const { nombre, password, email, newPassword, ...updates } = updateUsuarioDto;
+
+    if(nombre){
+      const findUserName = await this.usuarioModel.findOne( { nombre: nombre  } );
+
+       if(findUserName){
+        return {
+          nombreExiste:true,
+          emailExiste:false,
+          passwordIncorrecta:false,
+        }
+       }
+    }
+
+    if(email){
+      const findUseEmail = await this.usuarioModel.findOne( { email: email  } );
+
+       if(findUseEmail){
+        return {
+          nombreExiste:false,
+          emailExiste:true,
+          passwordIncorrecta:false,
+        }
+       }
+    }
+
+    if(password){
+      if( !bycrypt.compareSync( password, actualizarUsuario.password ) ){
+        return {
+          nombreExiste:false,
+          emailExiste:false,
+          passwordIncorrecta:true,
+        }
+      }
+    }
+
+    let nuevaContraseña:string;
+    if (newPassword) {
+        nuevaContraseña = bycrypt.hashSync(newPassword, 10);
+    }
+
+    const updateData: UpdateUsuarioDto = { ...updates };
+    if (nombre) updateData.nombre = nombre;
+    if (email) updateData.email = email;
+    if (nuevaContraseña) updateData.password = nuevaContraseña;
+
+    try {
+        const usuarioActualizado = await this.usuarioModel.findOneAndUpdate(
+            { idUsuario },
+            { $set: updateData },
+            { new: true },
+        );
+        return {
+            nombre: usuarioActualizado.nombre,
+            email: usuarioActualizado.email,
+        };
       } catch (error) {
         this.handleDatabaseError(error);
       }
