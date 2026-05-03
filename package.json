@@ -1,10 +1,10 @@
 {
-  "name": "first-prroyect-nest",
+  "name": "restaurante-presidente-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "RESTful API for powering Restaurante Presidente, a fullstack restaurant management platform built with NestJS, MongoDB, JWT authentication, shopping cart management, notifications, and email feedback integration.",
+  "author": "Emanuel Arévalo Martínez",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
