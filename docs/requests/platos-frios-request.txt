@@ -1,0 +1,35 @@
+
+{
+  "descripcionPlatoFrio": "Ensalada César",
+  "precio": 7.99,
+  "cantRestante": 20,
+  "imagenAsociada": "ensalada-de-cesar.png"
+}
+
+{
+  "descripcionPlatoFrio": "Ensalada de Manzana Verde y Cebollas",
+  "precio": 8.50,
+  "cantRestante": 16,
+  "imagenAsociada": "ensalada-de-manzana-verde-y-cebollas.png"
+}
+
+{
+  "descripcionPlatoFrio": "Ensalada de Tomates y Pepinos",
+  "precio": 7.25,
+  "cantRestante": 22,
+  "imagenAsociada": "ensalada-de-tomates-y-pepinos.png"
+}
+
+{
+  "descripcionPlatoFrio": "Ensalada de Zanahorias con Pimiento",
+  "precio": 6.99,
+  "cantRestante": 18,
+  "imagenAsociada": "ensalada-de-zanahorias-con-pimiento.png"
+}
+
+{
+  "descripcionPlatoFrio": "Ensalada Mixta",
+  "precio": 7.75,
+  "cantRestante": 25,
+  "imagenAsociada": "ensalada-mixta.png"
+}

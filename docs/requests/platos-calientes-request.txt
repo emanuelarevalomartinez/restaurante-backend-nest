@@ -1,0 +1,99 @@
+
+
+{
+  "descripcionPlato": "Brochetas de Puerco",
+  "precio": 10.99,
+  "cantRestante": 18,
+  "imagenAsociada": "brochetas-de-puerco.png"
+}
+
+{
+  "descripcionPlato": "Camarones al Ajillo",
+  "precio": 14.50,
+  "cantRestante": 12,
+  "imagenAsociada": "camarones.png"
+}
+
+{
+  "descripcionPlato": "Pollo Frito con Salsa y Arroz",
+  "precio": 11.75,
+  "cantRestante": 20,
+  "imagenAsociada": "comida-asiatica-pollo-frito-salsa-arroz-servido-plato-removebg-preview.png"
+}
+
+{
+  "descripcionPlato": "Ensalada de Pollo con Verduras y Aceitunas",
+  "precio": 8.99,
+  "cantRestante": 25,
+  "imagenAsociada": "ensalada-pollo-verduras-aceitunas.png"
+}
+
+{
+  "descripcionPlato": "Espagueti Especial",
+  "precio": 9.50,
+  "cantRestante": 22,
+  "imagenAsociada": "espagueti.png"
+}
+
+{
+  "descripcionPlato": "Estofado de Pavo",
+  "precio": 12.25,
+  "cantRestante": 14,
+  "imagenAsociada": "estofado-de-pavo.png"
+}
+
+{
+  "descripcionPlato": "Estofado de Pollo Criollo",
+  "precio": 10.50,
+  "cantRestante": 16,
+  "imagenAsociada": "estofado-de-pollo-criollo.png"
+}
+
+{
+  "descripcionPlato": "Estofado de Res",
+  "precio": 13.99,
+  "cantRestante": 10,
+  "imagenAsociada": "estofado-de-res.png"
+}
+
+{
+  "descripcionPlato": "Pizza de Jamón y Queso",
+  "precio": 15.50,
+  "cantRestante": 8,
+  "imagenAsociada": "pizza-con-jamon-y-queso.png"
+}
+
+{
+  "descripcionPlato": "Pizza de Tomate y Cebolla",
+  "precio": 14.25,
+  "cantRestante": 9,
+  "imagenAsociada": "pizza-cubierta-con-tomate-y-cebolla.png"
+}
+
+{
+  "descripcionPlato": "Pizza Margarita",
+  "precio": 13.75,
+  "cantRestante": 11,
+  "imagenAsociada": "pizza-margarita.png"
+}
+
+{
+  "descripcionPlato": "Gulash con Verduras",
+  "precio": 12.80,
+  "cantRestante": 13,
+  "imagenAsociada": "sabroso-estofado-gulash-verduras-servido-tazon-removebg-preview.png"
+}
+
+{
+  "descripcionPlato": "Sushi Variado",
+  "precio": 16.99,
+  "cantRestante": 15,
+  "imagenAsociada": "sushi.png"
+}
+
+{
+  "descripcionPlato": "Tacos Mexicanos",
+  "precio": 9.99,
+  "cantRestante": 24,
+  "imagenAsociada": "tacos.png"
+}

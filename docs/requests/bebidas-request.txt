@@ -1,0 +1,71 @@
+
+
+{
+  "descripcionBebida": "Café",
+  "precio": 2.50,
+  "cantRestante": 35,
+  "imagenAsociada": "cafe.png"
+}
+
+{
+  "descripcionBebida": "Café con Leche",
+  "precio": 3.25,
+  "cantRestante": 28,
+  "imagenAsociada": "cafe-con-leche.png"
+}
+
+{
+  "descripcionBebida": "Cerveza",
+  "precio": 4.99,
+  "cantRestante": 40,
+  "imagenAsociada": "cerveza.png"
+}
+
+{
+  "descripcionBebida": "Cóctel Especial",
+  "precio": 8.50,
+  "cantRestante": 18,
+  "imagenAsociada": "coctel.png"
+}
+
+{
+  "descripcionBebida": "Jugo de Naranja",
+  "precio": 3.99,
+  "cantRestante": 30,
+  "imagenAsociada": "jugo-de-naranja.png"
+}
+
+{
+  "descripcionBebida": "Mojito",
+  "precio": 7.50,
+  "cantRestante": 20,
+  "imagenAsociada": "mojito.png"
+}
+
+{
+  "descripcionBebida": "Té",
+  "precio": 2.75,
+  "cantRestante": 25,
+  "imagenAsociada": "te.png"
+}
+
+{
+  "descripcionBebida": "Tequila",
+  "precio": 6.99,
+  "cantRestante": 15,
+  "imagenAsociada": "tequila.png"
+}
+
+{
+  "descripcionBebida": "Vino",
+  "precio": 9.50,
+  "cantRestante": 22,
+  "imagenAsociada": "vino.png"
+}
+
+{
+  "descripcionBebida": "Whisky",
+  "precio": 11.99,
+  "cantRestante": 14,
+  "imagenAsociada": "whisky.png"
+}

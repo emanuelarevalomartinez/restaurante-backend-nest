@@ -1,0 +1,49 @@
+
+{
+  "descripcionPostre": "Arroz con Leche",
+  "precio": 4.50,
+  "cantRestante": 18,
+  "imagenAsociada": "arroz-con-leche.png"
+}
+
+{
+  "descripcionPostre": "Dona Glaseada",
+  "precio": 2.99,
+  "cantRestante": 30,
+  "imagenAsociada": "dona.png"
+}
+
+{
+  "descripcionPostre": "Galleticas de Chocolate",
+  "precio": 3.50,
+  "cantRestante": 25,
+  "imagenAsociada": "galleticas-de-chocolate.png"
+}
+
+{
+  "descripcionPostre": "Helado de Chocolate",
+  "precio": 5.25,
+  "cantRestante": 20,
+  "imagenAsociada": "helado-de-chocolate.png"
+}
+
+{
+  "descripcionPostre": "Magdalena",
+  "precio": 3.25,
+  "cantRestante": 22,
+  "imagenAsociada": "magdalena.png"
+}
+
+{
+  "descripcionPostre": "Pan Dulce",
+  "precio": 2.75,
+  "cantRestante": 28,
+  "imagenAsociada": "pan-dulce.png"
+}
+
+{
+  "descripcionPostre": "Pastel de Manzana",
+  "precio": 6.50,
+  "cantRestante": 15,
+  "imagenAsociada": "pastel-de-manzana.png"
+}
