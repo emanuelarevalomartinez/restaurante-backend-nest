@@ -59,7 +59,7 @@ The API is built using NestJS and follows a modular domain-based architecture to
 Clone the repository:
 
 ```bash
-git clone https://github.com/emanuelarevalomartinez/restaurante-backend-nest
+git clone https://github.com/emanuelarevalomartinez/restaurante-backend-nest.git
 cd restaurante-backend-nest
 ```
 
